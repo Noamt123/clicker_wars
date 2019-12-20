@@ -14,14 +14,14 @@ pipeline {
 
 
 
-                         mkdir -p ~/.aws
-                         echo "[default]" >~/.aws/credentials
-                         echo "[default]" >~/.boto
-                         echo "aws_access_key_id = ${AWS_ACCESS_KEY_ID}" >>~/.boto
-                         echo "aws_secret_access_key = ${AWS_SECRET_ACCESS_KEY}" >>~/.boto
-                         echo "aws_access_key_id = ${AWS_ACCESS_KEY_ID}" >>~/.aws/credentials
-                         echo "aws_secret_access_key = ${AWS_SECRET_ACCESS_KEY}" >>~/.aws/credentials
-                           """
+                                   mkdir -p ~/.aws
+                                   echo "[default]" >~/.aws/credentials
+                                   echo "[default]" >~/.boto
+                                   echo "aws_access_key_id = ${AWS_ACCESS_KEY_ID}" >>~/.boto
+                                   echo "aws_secret_access_key = ${AWS_SECRET_ACCESS_KEY}" >>~/.boto
+                                   echo "aws_access_key_id = ${AWS_ACCESS_KEY_ID}" >>~/.aws/credentials
+                                   echo "aws_secret_access_key = ${AWS_SECRET_ACCESS_KEY}" >>~/.aws/credentials
+                                     """
         }
 
       }
@@ -29,9 +29,11 @@ pipeline {
 
     stage('Docker login') {
       steps {
-        withCredentials([usernamePassword(credentialsId: 'DOCKER', passwordVariable: 'word',  usernameVariable:  'user')]){
-        sh 'docker login --username $user --password $word'
+        withCredentials(bindings: [usernamePassword(credentialsId: 'DOCKER', passwordVariable: 'word',  usernameVariable:  'user')]) {
+          sh '''pip install docker
+docker login --username $user --password $word'''
         }
+
       }
     }
 
